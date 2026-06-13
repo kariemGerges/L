@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { Logo } from "@/components/ui/Logo";
 import { BRAND_NAME, CONTACT_EMAIL, NAV_LINKS } from "@/lib/constants";
 
 const MARQUEE = "Every moment, beautifully planned — ";
@@ -53,11 +54,12 @@ export function MobileMenu({ open, onClose, pathname }: MobileMenuProps) {
       <div className="menu-ui relative flex items-center justify-between px-6 pt-8">
         <Link
           href="/"
+          aria-label={`${BRAND_NAME} — Home`}
           onClick={onClose}
-          className="font-display text-xl italic text-cream/90 transition-opacity hover:text-accent-gold"
+          className="transition-opacity duration-200 hover:opacity-80"
           tabIndex={open ? 0 : -1}
         >
-          {BRAND_NAME}
+          <Logo size="md" />
         </Link>
         <button
           ref={closeRef}

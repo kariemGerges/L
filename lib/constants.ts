@@ -1,6 +1,8 @@
-export const BRAND_NAME = "Elara Laurent";
+export const BRAND_NAME = "Lumé Events";
 export const BRAND_TAGLINE = "Bespoke Celebrations";
-export const CONTACT_EMAIL = "hello@elaralaurent.com";
+export const LOGO_PATH = "/logo.jpeg";
+export const ABOUT_IMAGE_PATH = "/about-decoration.jpg";
+export const CONTACT_EMAIL = "lumeevent2026@gmail.com";
 export const CONTACT_PHONE = "+1 (555) 234-8901";
 
 export const NAV_LINKS = [

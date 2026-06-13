@@ -6,7 +6,7 @@ const TESTIMONIALS = [
     name: "Sophie & James",
     event: "Wedding",
     quote:
-      "Elara transformed our wedding into something beyond our wildest dreams. Every detail felt personal, intentional, and utterly magical.",
+      "Lumé Events transformed our wedding into something beyond our wildest dreams. Every detail felt personal, intentional, and utterly magical.",
   },
   {
     name: "Michelle R.",

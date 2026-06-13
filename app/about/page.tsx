@@ -3,12 +3,13 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { BRAND_NAME } from "@/lib/constants";
+import { BRAND_NAME, ABOUT_IMAGE_PATH } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Meet the planner behind your perfect celebration.",
+  description:
+    "Learn how Lumé Events grew from a passion for decorating into a business dedicated to creating beautiful, memorable celebrations.",
 };
 
 const VALUES = [
@@ -26,16 +27,10 @@ const VALUES = [
   },
   {
     icon: Award,
-    title: "Stress-Free Planning",
+    title: "Beautiful Setups",
     description:
-      "From vendor coordination to day-of management, we handle the logistics so you can be fully present for your moment.",
+      "From birthdays to bridal showers, we transform ordinary spaces into elegant, unforgettable experiences.",
   },
-] as const;
-
-const STATS = [
-  { value: "150+", label: "Events Planned" },
-  { value: "8", label: "Years Experience" },
-  { value: "5-Star", label: "Reviews" },
 ] as const;
 
 export default function AboutPage() {
@@ -43,50 +38,67 @@ export default function AboutPage() {
     <>
       <section className="bg-blush/30 pt-32 pb-20 md:pt-40 md:pb-28">
         <div className="mx-auto max-w-3xl px-6 text-center lg:px-8">
-          <p className="font-display text-lg italic text-accent-gold">Meet your planner</p>
+          <p className="font-display text-lg italic text-accent-gold">About us</p>
           <h1 className="mt-4 font-display text-5xl font-light text-foreground md:text-6xl">
-            {BRAND_NAME}
+            Welcome to {BRAND_NAME}
           </h1>
           <p className="mt-6 font-display text-xl italic text-muted">
-            Turning visions into unforgettable celebrations
+            Creating moments that shine
           </p>
         </div>
       </section>
 
       <section className="py-20 md:py-28">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2 lg:gap-20 lg:px-8">
+        <div className="mx-auto grid max-w-7xl items-start gap-12 px-6 lg:grid-cols-2 lg:gap-20 lg:px-8">
           <RevealOnScroll>
             <div>
-              <h2 className="font-display text-4xl text-foreground">My Story</h2>
+              <h2 className="font-display text-4xl text-foreground">Our Story</h2>
               <div className="mt-6 space-y-4 text-muted leading-relaxed">
                 <p>
-                  I founded {BRAND_NAME} with a simple belief: every celebration deserves to feel
-                  as meaningful as the moment it honours. With a background in design and a
-                  lifelong love of bringing people together, I&apos;ve spent eight years crafting
-                  events that blend editorial elegance with genuine warmth.
+                  The idea for {BRAND_NAME} started long before. For a long time, I found myself
+                  thinking about creating an event decoration business. I spent time researching,
+                  learning, planning, and making lists of the products, supplies, and ideas I would
+                  need to bring my vision to life.
                 </p>
                 <p>
-                  From intimate engagement dinners to grand wedding weekends, I approach each
-                  project as a collaboration — listening first, designing second, and executing
-                  with meticulous care. My clients trust me not only for beautiful aesthetics, but
-                  for the calm, capable presence I bring to every step of the journey.
+                  I have always enjoyed decorating and creating beautiful setups for friends and
+                  family. Over time, I realized how much I loved transforming ordinary spaces into
+                  something special and memorable.
                 </p>
                 <p>
-                  When I&apos;m not sketching floor plans or sourcing the perfect linen, you&apos;ll
-                  find me exploring florists, collecting vintage tableware, and dreaming up the
-                  next unforgettable gathering.
+                  When it came time to plan my own birthday celebration, I put all of my ideas
+                  together and created a decoration setup that reflected my style and creativity.
+                  After sharing photos and videos on social media, I received so many positive
+                  comments and messages from friends and others who loved the design. Their
+                  encouragement gave me the confidence to take the next step. That experience made me
+                  realize it was time to turn my passion into a business.
+                </p>
+                <p>
+                  Today, {BRAND_NAME} was created with the goal of helping people celebrate
+                  life&apos;s most meaningful moments. Whether it&apos;s a birthday, engagement,
+                  bridal shower, baby shower, or special gathering, we believe every event deserves
+                  beauty, creativity, and a personal touch.
+                </p>
+                <p>
+                  The name &ldquo;Lumé&rdquo; represents light, glow, and the joy that comes from
+                  celebrating special occasions. Our mission is to create elegant and
+                  unforgettable experiences that bring people together and leave lasting memories.
+                </p>
+                <p>
+                  Thank you for being part of our journey. We look forward to helping you create
+                  moments that shine.
                 </p>
               </div>
               <Button href="/book" variant="primary" className="mt-10">
-                Work With Me
+                Book Your Event
               </Button>
             </div>
           </RevealOnScroll>
           <RevealOnScroll>
-            <div className="relative aspect-[3/4] overflow-hidden">
+            <div className="relative aspect-[3/4] overflow-hidden lg:sticky lg:top-32">
               <Image
-                src="https://picsum.photos/seed/planner/700/900"
-                alt={`${BRAND_NAME}, event planner`}
+                src={ABOUT_IMAGE_PATH}
+                alt={`Elegant event tablescape styled by ${BRAND_NAME}`}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -113,17 +125,6 @@ export default function AboutPage() {
               </RevealOnScroll>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="border-y border-blush/50 bg-cream py-16">
-        <div className="mx-auto flex max-w-4xl flex-col items-center justify-around gap-10 px-6 sm:flex-row lg:px-8">
-          {STATS.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p className="font-display text-5xl text-accent-gold">{stat.value}</p>
-              <p className="mt-2 text-xs uppercase tracking-widest text-muted">{stat.label}</p>
-            </div>
-          ))}
         </div>
       </section>
     </>

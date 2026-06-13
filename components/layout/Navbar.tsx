@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { Button } from "@/components/ui/Button";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { MenuToggle } from "@/components/layout/MenuToggle";
@@ -12,6 +13,8 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const isHome = pathname === "/";
+  const useLightNav = isHome && !scrolled && !mobileOpen;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -45,12 +48,13 @@ export function Navbar() {
         >
           <Link
             href="/"
-            className={`font-display text-2xl italic tracking-wide transition-colors md:text-3xl ${
-              mobileOpen ? "pointer-events-auto text-cream" : "text-foreground"
+            aria-label={`${BRAND_NAME} — Home`}
+            className={`transition-opacity duration-200 hover:opacity-80 ${
+              mobileOpen ? "pointer-events-auto" : ""
             }`}
             onClick={() => setMobileOpen(false)}
           >
-            {BRAND_NAME}
+            <BrandMark light={useLightNav} />
           </Link>
 
           <ul className="hidden items-center gap-8 lg:flex">
@@ -59,7 +63,11 @@ export function Navbar() {
                 <Link
                   href={link.href}
                   className={`text-sm uppercase tracking-widest transition-colors duration-200 hover:text-accent-gold ${
-                    pathname === link.href ? "text-accent-gold" : "text-foreground"
+                    pathname === link.href
+                      ? "text-accent-gold"
+                      : useLightNav
+                        ? "text-cream/85"
+                        : "text-foreground"
                   }`}
                 >
                   {link.label}
@@ -69,13 +77,25 @@ export function Navbar() {
           </ul>
 
           <div className="hidden lg:block">
-            <Button href="/book" variant="primary" className="!py-2.5 !px-5 !text-xs">
+            <Button
+              href="/book"
+              variant="primary"
+              className={`!py-2.5 !px-5 !text-xs ${
+                useLightNav
+                  ? "!border-accent-gold !bg-accent-gold !text-foreground hover:!bg-accent-gold/90"
+                  : ""
+              }`}
+            >
               Book Now
             </Button>
           </div>
 
           <div className={mobileOpen ? "pointer-events-auto" : ""}>
-            <MenuToggle open={mobileOpen} onClick={() => setMobileOpen(true)} />
+            <MenuToggle
+              open={mobileOpen}
+              onClick={() => setMobileOpen(true)}
+              light={useLightNav}
+            />
           </div>
         </nav>
       </header>

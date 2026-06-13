@@ -1,9 +1,10 @@
 import { BookingForm } from "@/components/book/BookingForm";
+import { BRAND_NAME } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Book Your Event",
-  description: "Start planning your bespoke celebration with Elara Laurent.",
+  description: `Start planning your bespoke celebration with ${BRAND_NAME}.`,
 };
 
 export default function BookPage() {
