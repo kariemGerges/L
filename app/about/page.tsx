@@ -95,15 +95,17 @@ export default function AboutPage() {
             </div>
           </RevealOnScroll>
           <RevealOnScroll>
-            <div className="relative aspect-[3/4] overflow-hidden lg:sticky lg:top-32">
-              <Image
-                src={ABOUT_IMAGE_PATH}
-                alt={`Elegant event tablescape styled by ${BRAND_NAME}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority
-              />
+            <div className="lg:sticky lg:top-32">
+              <div className="relative aspect-[3/4] overflow-hidden">
+                <Image
+                  src={ABOUT_IMAGE_PATH}
+                  alt={`Elegant event tablescape styled by ${BRAND_NAME}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  priority
+                />
+              </div>
             </div>
           </RevealOnScroll>
         </div>
