@@ -1,14 +1,13 @@
 import { GalleryGrid } from "@/app/gallery/GalleryGrid";
-import type { Metadata } from "next";
+import { PageJsonLd } from "@/components/seo/PageJsonLd";
+import { getPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Gallery",
-  description: "A curated collection of past celebrations and events.",
-};
+export const metadata = getPageMetadata("gallery");
 
 export default function GalleryPage() {
   return (
     <>
+      <PageJsonLd pageKey="gallery" />
       <section className="bg-blush/30 pt-32 pb-16 md:pt-40 md:pb-20">
         <div className="mx-auto max-w-3xl px-6 text-center lg:px-8">
           <p className="font-display text-lg italic text-accent-gold">Portfolio</p>

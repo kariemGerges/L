@@ -1,3 +1,5 @@
+import { BRAND_NAME_LINE1, BRAND_NAME_LINE2 } from "@/lib/constants";
+
 interface BrandMarkProps {
   light?: boolean;
   className?: string;
@@ -11,14 +13,14 @@ export function BrandMark({ light = false, className = "" }: BrandMarkProps) {
           light ? "text-cream" : "text-foreground"
         }`}
       >
-        Lumé
+        {BRAND_NAME_LINE1}
       </span>
       <span
         className={`mt-1 text-[10px] font-medium uppercase tracking-[0.4em] ${
           light ? "text-cream/55" : "text-muted"
         }`}
       >
-        Events
+        {BRAND_NAME_LINE2}
       </span>
     </span>
   );

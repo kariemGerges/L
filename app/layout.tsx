@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
-import { BRAND_NAME, BRAND_TAGLINE, LOGO_PATH } from "@/lib/constants";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { rootMetadata } from "@/lib/metadata";
+import { buildRootSchemas } from "@/lib/seo/json-ld";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -18,25 +19,7 @@ const dmSans = DM_Sans({
   weight: ["400", "500", "600", "700"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title: {
-    default: `${BRAND_NAME} | ${BRAND_TAGLINE}`,
-    template: `%s | ${BRAND_NAME}`,
-  },
-  description:
-    "Bespoke event planning for weddings, engagements, birthdays, and special celebrations.",
-  icons: {
-    icon: LOGO_PATH,
-    apple: LOGO_PATH,
-  },
-  openGraph: {
-    title: BRAND_NAME,
-    description:
-      "Bespoke event planning for weddings, engagements, birthdays, and special celebrations.",
-    images: [{ url: LOGO_PATH, alt: BRAND_NAME }],
-  },
-};
+export const metadata = rootMetadata;
 
 export default function RootLayout({
   children,
@@ -49,8 +32,17 @@ export default function RootLayout({
       className={`${cormorant.variable} ${dmSans.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
+        <JsonLd data={buildRootSchemas()} />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-foreground focus:px-4 focus:py-2 focus:text-cream"
+        >
+          Skip to main content
+        </a>
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

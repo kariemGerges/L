@@ -1,12 +1,12 @@
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { BRAND_NAME } from "@/lib/constants";
 
 const TESTIMONIALS = [
   {
     name: "Sophie & James",
     event: "Wedding",
-    quote:
-      "Lumé Events transformed our wedding into something beyond our wildest dreams. Every detail felt personal, intentional, and utterly magical.",
+    quote: `${BRAND_NAME} transformed our wedding into something beyond our wildest dreams. Every detail felt personal, intentional, and utterly magical.`,
   },
   {
     name: "Michelle R.",

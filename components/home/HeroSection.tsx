@@ -1,20 +1,12 @@
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
-import { HERO_VIDEO_PATH } from "@/lib/constants";
+import { HeroBackgroundVideo } from "@/components/home/HeroBackgroundVideo";
+import { BRAND_NAME } from "@/lib/constants";
 
 export function HeroSection() {
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080808] pt-20">
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="hero-video pointer-events-none absolute inset-0 h-full w-full object-cover"
-        aria-hidden
-      >
-        <source src={HERO_VIDEO_PATH} type="video/quicktime" />
-      </video>
+      <HeroBackgroundVideo />
 
       <div
         className="pointer-events-none absolute inset-0 bg-[#080808]/55"
@@ -30,6 +22,10 @@ export function HeroSection() {
       />
 
       <div className="relative z-10 mx-auto max-w-4xl px-6 py-24 text-center">
+        <h1 className="sr-only">
+          {BRAND_NAME} — bespoke event planning and decoration for weddings, birthdays, and
+          celebrations
+        </h1>
         <div className="animate-fade-up flex justify-center">
           <Logo size="hero" priority circular />
         </div>

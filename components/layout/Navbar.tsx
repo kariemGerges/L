@@ -62,6 +62,7 @@ export function Navbar() {
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  aria-current={pathname === link.href ? "page" : undefined}
                   className={`text-sm uppercase tracking-widest transition-colors duration-200 hover:text-accent-gold ${
                     pathname === link.href
                       ? "text-accent-gold"

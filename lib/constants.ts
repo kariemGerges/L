@@ -1,10 +1,17 @@
 export const BRAND_NAME = "Lumé Events";
+export const BRAND_NAME_LINE1 = "Lumé";
+export const BRAND_NAME_LINE2 = "Events";
 export const BRAND_TAGLINE = "Bespoke Celebrations";
+export const SITE_DESCRIPTION =
+  "Bespoke event planning for weddings, engagements, birthdays, and special celebrations.";
+export const FOOTER_MOTTO = "Every moment, beautifully planned.";
 export const LOGO_PATH = "/logo.jpeg";
 export const ABOUT_IMAGE_PATH = "/about-decoration.jpg";
-export const HERO_VIDEO_PATH = "/10.mov";
+export const HERO_VIDEO_SOURCES = [
+  { src: "/10.mp4", type: "video/mp4" },
+  { src: "/10.mov", type: "video/quicktime" },
+] as const;
 export const CONTACT_EMAIL = "lumeevent2026@gmail.com";
-export const CONTACT_PHONE = "+1 (555) 234-8901";
 
 export const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -33,8 +40,10 @@ export const BUDGET_RANGES = [
 ] as const;
 
 export const HEAR_ABOUT_OPTIONS = [
+  "TikTok",
   "Instagram",
   "Pinterest",
+  "X",
   "Friend or Family",
   "Google Search",
   "Wedding Fair",

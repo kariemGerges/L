@@ -1,17 +1,7 @@
 import Link from "next/link";
-import {
-  FacebookIcon,
-  InstagramIcon,
-  PinterestIcon,
-} from "@/components/ui/SocialIcons";
 import { Logo } from "@/components/ui/Logo";
-import { BRAND_NAME, BRAND_TAGLINE, CONTACT_EMAIL, NAV_LINKS } from "@/lib/constants";
-
-const SOCIAL_LINKS = [
-  { href: "https://instagram.com", label: "Instagram", icon: InstagramIcon },
-  { href: "https://pinterest.com", label: "Pinterest", icon: PinterestIcon },
-  { href: "https://facebook.com", label: "Facebook", icon: FacebookIcon },
-] as const;
+import { SOCIAL_LINKS } from "@/lib/content/social";
+import { BRAND_NAME, BRAND_TAGLINE, CONTACT_EMAIL, FOOTER_MOTTO, NAV_LINKS } from "@/lib/constants";
 
 export function Footer() {
   return (
@@ -66,14 +56,15 @@ export function Footer() {
               >
                 {CONTACT_EMAIL}
               </a>
-              <div className="mt-6 flex gap-4">
+              <p className="mt-3 text-sm text-muted">DM us on social media</p>
+              <div className="mt-4 flex gap-4">
                 {SOCIAL_LINKS.map(({ href, label, icon: Icon }) => (
                   <a
                     key={label}
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={label}
+                    aria-label={`DM ${BRAND_NAME} on ${label}`}
                     className="flex h-10 w-10 items-center justify-center border border-blush text-muted transition-all duration-200 hover:border-accent-gold hover:text-accent-gold"
                   >
                     <Icon className="h-4 w-4" />
@@ -88,7 +79,7 @@ export function Footer() {
               &copy; {new Date().getFullYear()} {BRAND_NAME}. All rights reserved.
             </p>
             <p className="font-display text-sm italic text-accent-gold">
-              Every moment, beautifully planned.
+              {FOOTER_MOTTO}
             </p>
           </div>
         </div>

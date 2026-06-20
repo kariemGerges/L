@@ -3,76 +3,19 @@
 import { Cake, Gem, Heart, LayoutGrid, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import {
+  GALLERY_FILTERS,
+  GALLERY_ITEMS,
+  type GalleryCategory,
+} from "@/lib/content/gallery";
 
-type GalleryCategory = "All" | "Birthdays" | "Engagements" | "Weddings" | "Special Events";
-
-const FILTERS: {
-  label: GalleryCategory;
-  icon: typeof LayoutGrid;
-}[] = [
-  { label: "All", icon: LayoutGrid },
-  { label: "Birthdays", icon: Cake },
-  { label: "Engagements", icon: Gem },
-  { label: "Weddings", icon: Heart },
-  { label: "Special Events", icon: Sparkles },
-];
-
-const GALLERY_ITEMS = [
-  {
-    id: 1,
-    src: "/1.JPG",
-    category: "Special Events" as const,
-    alt: "Baby shower floor seating and table styling",
-  },
-  {
-    id: 2,
-    src: "/2.JPG",
-    category: "Birthdays" as const,
-    alt: "Birthday celebration decoration",
-  },
-  {
-    id: 3,
-    src: "/3.JPG",
-    category: "Engagements" as const,
-    alt: "Engagement party setup",
-  },
-  {
-    id: 4,
-    src: "/4.JPG",
-    category: "Special Events" as const,
-    alt: "Special event decoration",
-  },
-  {
-    id: 5,
-    src: "/5.JPG",
-    category: "Weddings" as const,
-    alt: "Wedding welcome mirror display",
-  },
-  {
-    id: 6,
-    src: "/6.JPG",
-    category: "Birthdays" as const,
-    alt: "Birthday event styling",
-  },
-  {
-    id: 7,
-    src: "/7.jpeg",
-    category: "Engagements" as const,
-    alt: "Engagement celebration decor",
-  },
-  {
-    id: 8,
-    src: "/8.JPG",
-    category: "Weddings" as const,
-    alt: "Wedding reception styling",
-  },
-  {
-    id: 9,
-    src: "/9.jpeg",
-    category: "Special Events" as const,
-    alt: "Elegant banquet table decoration",
-  },
-] as const;
+const FILTER_ICONS = {
+  All: LayoutGrid,
+  Birthdays: Cake,
+  Engagements: Gem,
+  Weddings: Heart,
+  "Special Events": Sparkles,
+} as const;
 
 export function GalleryGrid() {
   const [activeFilter, setActiveFilter] = useState<GalleryCategory>("All");
@@ -101,15 +44,16 @@ export function GalleryGrid() {
             role="tablist"
             aria-label="Filter gallery by event type"
           >
-            {FILTERS.map(({ label, icon: Icon }) => {
-              const isActive = activeFilter === label;
+            {GALLERY_FILTERS.map((filter) => {
+              const isActive = activeFilter === filter;
+              const Icon = FILTER_ICONS[filter];
               return (
                 <button
-                  key={label}
+                  key={filter}
                   type="button"
                   role="tab"
                   aria-selected={isActive}
-                  onClick={() => setActiveFilter(label)}
+                  onClick={() => setActiveFilter(filter)}
                   className={`group flex items-center gap-2 border px-4 py-2.5 text-xs uppercase tracking-widest transition-all duration-300 ${
                     isActive
                       ? "border-accent-gold bg-accent-gold/10 text-foreground shadow-[0_0_0_1px_rgba(201,168,76,0.15)]"
@@ -122,7 +66,7 @@ export function GalleryGrid() {
                     }`}
                     strokeWidth={1.5}
                   />
-                  {label}
+                  {filter}
                 </button>
               );
             })}
@@ -136,7 +80,11 @@ export function GalleryGrid() {
         </div>
       </div>
 
-      <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
+      <div
+        className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
+        role="tabpanel"
+        aria-label={`${activeFilter} gallery items`}
+      >
         {filtered.map((item) => (
           <article key={item.id} className="group relative aspect-square overflow-hidden">
             <Image

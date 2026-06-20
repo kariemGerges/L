@@ -21,10 +21,18 @@ export function PinterestIcon(props: IconProps) {
   );
 }
 
-export function FacebookIcon(props: IconProps) {
+export function TikTokIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" {...props}>
-      <path d="M14 8h3V5h-3c-2.2 0-4 1.8-4 4v2H7v3h3v7h3v-7h3l1-3h-4V9c0-.6.4-1 1-1z" />
+      <path d="M9 12a4 4 0 1 0 4 4V4.5a6.5 6.5 0 0 0 6.5 6.5" />
+    </svg>
+  );
+}
+
+export function XIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" {...props}>
+      <path d="M4 4l16 16M20 4L4 20" />
     </svg>
   );
 }

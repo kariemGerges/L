@@ -4,9 +4,9 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Logo } from "@/components/ui/Logo";
-import { BRAND_NAME, CONTACT_EMAIL, NAV_LINKS } from "@/lib/constants";
+import { BRAND_NAME, CONTACT_EMAIL, FOOTER_MOTTO, NAV_LINKS } from "@/lib/constants";
 
-const MARQUEE = "Every moment, beautifully planned — ";
+const MARQUEE = `${FOOTER_MOTTO} — `;
 
 interface MobileMenuProps {
   open: boolean;
@@ -87,6 +87,7 @@ export function MobileMenu({ open, onClose, pathname }: MobileMenuProps) {
                   href={link.href}
                   onClick={onClose}
                   tabIndex={open ? 0 : -1}
+                  aria-current={isActive ? "page" : undefined}
                   className="group flex items-center justify-between py-5"
                 >
                   <span

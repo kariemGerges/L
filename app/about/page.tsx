@@ -3,14 +3,11 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { PageJsonLd } from "@/components/seo/PageJsonLd";
 import { BRAND_NAME, ABOUT_IMAGE_PATH } from "@/lib/constants";
-import type { Metadata } from "next";
+import { getPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Learn how Lumé Events grew from a passion for decorating into a business dedicated to creating beautiful, memorable celebrations.",
-};
+export const metadata = getPageMetadata("about");
 
 const VALUES = [
   {
@@ -36,6 +33,7 @@ const VALUES = [
 export default function AboutPage() {
   return (
     <>
+      <PageJsonLd pageKey="about" />
       <section className="bg-blush/30 pt-32 pb-20 md:pt-40 md:pb-28">
         <div className="mx-auto max-w-3xl px-6 text-center lg:px-8">
           <p className="font-display text-lg italic text-accent-gold">About us</p>

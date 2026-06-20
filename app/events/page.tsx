@@ -1,54 +1,18 @@
-import { Cake, Gem, Heart, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import type { Metadata } from "next";
+import { PageJsonLd } from "@/components/seo/PageJsonLd";
+import { EVENT_CATEGORIES } from "@/lib/content/events";
+import { getPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Events",
-  description: "Weddings, engagements, birthdays, and bespoke celebrations.",
-};
-
-const EVENT_CATEGORIES = [
-  {
-    id: "birthdays",
-    icon: Cake,
-    title: "Birthday Parties",
-    description:
-      "From intimate dinner parties to lavish milestone celebrations, we design birthdays that reflect the guest of honour's personality — thoughtful details, curated menus, and atmospheres that spark joy.",
-    image: "/3.JPG",
-  },
-  {
-    id: "engagements",
-    icon: Gem,
-    title: "Engagement Parties",
-    description:
-      "Celebrate your love story with an engagement party that sets the tone for your journey ahead. Romantic florals, candlelit tables, and bespoke touches that feel effortlessly elegant.",
-    image: "/2.JPG",
-  },
-  {
-    id: "weddings",
-    icon: Heart,
-    title: "Weddings",
-    description:
-      "Full-service wedding planning from concept to celebration day. Venue selection, vendor curation, timeline management, and design direction — so you can savour every moment.",
-    image: "/5.JPG",
-  },
-  {
-    id: "special",
-    icon: Sparkles,
-    title: "Special & Custom Events",
-    description:
-      "Baby showers, anniversaries, corporate retreats, and celebrations that defy categorisation. If you can dream it, we can design and deliver it with grace.",
-    image: "/4.JPG",
-  },
-] as const;
+export const metadata = getPageMetadata("events");
 
 export default function EventsPage() {
   return (
     <>
+      <PageJsonLd pageKey="events" />
       <section className="bg-blush/30 pt-32 pb-20 md:pt-40 md:pb-28">
         <div className="mx-auto max-w-3xl px-6 text-center lg:px-8">
           <p className="font-display text-lg italic text-accent-gold">Our services</p>
@@ -85,6 +49,7 @@ export default function EventsPage() {
                   <category.icon
                     className="h-8 w-8 text-accent-gold"
                     strokeWidth={1.25}
+                    aria-hidden
                   />
                   <h2 className="mt-6 font-display text-4xl text-foreground">{category.title}</h2>
                   <p className="mt-6 leading-relaxed text-muted">{category.description}</p>

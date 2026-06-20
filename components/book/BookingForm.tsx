@@ -1,30 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { submitBookingForm } from "@/lib/actions/booking";
 import { Button } from "@/components/ui/Button";
+import { fieldAriaProps, FormField } from "@/components/ui/FormField";
+import {
+  errorClassName,
+  honeypotClassName,
+  inputClassName,
+  labelClassName,
+} from "@/components/ui/form-styles";
 import {
   BUDGET_RANGES,
   EVENT_TYPES,
   HEAR_ABOUT_OPTIONS,
 } from "@/lib/constants";
+import {
+  BOOKING_STEP_SCHEMAS,
+  bookingFormSchema,
+  type BookingFormInput,
+} from "@/lib/validation/schemas";
+import { zodFieldErrors } from "@/lib/validation/parse-errors";
 
-export interface BookingFormData {
-  eventType: string;
-  eventDate: string;
-  guestCount: string;
-  location: string;
-  budget: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  hearAbout: string;
-  dreamEvent: string;
-  themes: string;
-  specialRequests: string;
-}
+type BookingFormState = {
+  [K in keyof BookingFormInput]: string;
+};
 
-const INITIAL_DATA: BookingFormData = {
+const EMPTY_DATA: BookingFormState = {
   eventType: "",
   eventDate: "",
   guestCount: "",
@@ -38,20 +40,21 @@ const INITIAL_DATA: BookingFormData = {
   dreamEvent: "",
   themes: "",
   specialRequests: "",
+  website: "",
 };
 
-const TOTAL_STEPS = 4;
-
-const inputClass =
-  "mt-2 w-full border border-blush/80 bg-white px-4 py-3 text-sm text-foreground outline-none transition-colors duration-200 focus:border-accent-gold";
-const labelClass = "block text-xs font-medium uppercase tracking-widest text-foreground";
+const TOTAL_STEPS = 3;
 
 export function BookingForm() {
   const [step, setStep] = useState(1);
-  const [data, setData] = useState<BookingFormData>(INITIAL_DATA);
-  const [errors, setErrors] = useState<Partial<Record<keyof BookingFormData, string>>>({});
+  const [data, setData] = useState<BookingFormState>(EMPTY_DATA);
+  const [errors, setErrors] = useState<Partial<Record<keyof BookingFormState, string>>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [submissionId, setSubmissionId] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  const update = (field: keyof BookingFormData, value: string) => {
+  const update = (field: keyof BookingFormState, value: string) => {
     setData((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => {
       const next = { ...prev };
@@ -61,32 +64,16 @@ export function BookingForm() {
   };
 
   const validateStep = (currentStep: number): boolean => {
-    const newErrors: Partial<Record<keyof BookingFormData, string>> = {};
+    const schema = BOOKING_STEP_SCHEMAS[currentStep - 1];
+    const parsed = schema.safeParse(data);
 
-    if (currentStep === 1) {
-      if (!data.eventType) newErrors.eventType = "Please select an event type";
-      if (!data.eventDate) newErrors.eventDate = "Please choose a date";
-      if (!data.guestCount || Number(data.guestCount) < 1)
-        newErrors.guestCount = "Please enter guest count";
-      if (!data.location.trim()) newErrors.location = "Please enter a location";
-      if (!data.budget) newErrors.budget = "Please select a budget range";
+    if (!parsed.success) {
+      setErrors(zodFieldErrors(parsed.error));
+      return false;
     }
 
-    if (currentStep === 2) {
-      if (!data.firstName.trim()) newErrors.firstName = "First name is required";
-      if (!data.lastName.trim()) newErrors.lastName = "Last name is required";
-      if (!data.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))
-        newErrors.email = "Please enter a valid email";
-      if (!data.phone.trim()) newErrors.phone = "Phone number is required";
-      if (!data.hearAbout) newErrors.hearAbout = "Please let us know how you found us";
-    }
-
-    if (currentStep === 3) {
-      if (!data.dreamEvent.trim()) newErrors.dreamEvent = "Please describe your dream event";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors({});
+    return true;
   };
 
   const next = () => {
@@ -98,13 +85,33 @@ export function BookingForm() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
+
     if (!validateStep(3)) return;
-    setStep(4);
+
+    const parsed = bookingFormSchema.safeParse(data);
+    if (!parsed.success) {
+      setErrors(zodFieldErrors(parsed.error));
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await submitBookingForm(parsed.data);
+
+      if (!result.success) {
+        setFormError(result.error);
+        if (result.fieldErrors) setErrors(result.fieldErrors);
+        return;
+      }
+
+      setSubmitted(true);
+      setSubmissionId(result.data.submissionId);
+    });
   };
 
-  if (step === 4) {
+  if (submitted) {
     return (
-      <div className="step-enter mx-auto max-w-2xl text-center">
+      <div className="step-enter mx-auto max-w-2xl text-center" role="status" aria-live="polite">
         <p className="font-display text-lg italic text-accent-gold">Thank you</p>
         <h2 className="mt-4 font-display text-4xl text-foreground md:text-5xl">
           We&apos;ve received your enquiry
@@ -112,6 +119,11 @@ export function BookingForm() {
         <p className="mt-6 text-muted">
           We&apos;ll be in touch within 24 hours to begin planning your celebration.
         </p>
+        {submissionId && submissionId !== "ignored" && (
+          <p className="mt-4 text-xs uppercase tracking-widest text-muted">
+            Reference: <span className="text-foreground">{submissionId}</span>
+          </p>
+        )}
 
         <div className="mt-12 border border-blush/60 bg-cream p-8 text-left text-sm">
           <h3 className="mb-6 font-display text-xl text-foreground">Your submission</h3>
@@ -135,31 +147,60 @@ export function BookingForm() {
     );
   }
 
+  const progress = Math.round((step / TOTAL_STEPS) * 100);
+
   return (
-    <form onSubmit={submit} className="mx-auto max-w-2xl">
+    <form onSubmit={submit} className="mx-auto max-w-2xl" noValidate>
       <div className="mb-10">
         <div className="flex items-center justify-between text-xs uppercase tracking-widest text-muted">
           <span>
             Step {step} of {TOTAL_STEPS}
           </span>
-          <span>{Math.round((step / TOTAL_STEPS) * 100)}% complete</span>
+          <span>{progress}% complete</span>
         </div>
-        <div className="mt-3 h-1 w-full bg-blush/50">
+        <div
+          className="mt-3 h-1 w-full bg-blush/50"
+          role="progressbar"
+          aria-valuenow={progress}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Booking form progress"
+        >
           <div
             className="h-full bg-accent-gold transition-all duration-500 ease-out"
-            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
+            style={{ width: `${progress}%` }}
           />
         </div>
+      </div>
+
+      {formError && (
+        <p role="alert" className={`mb-6 ${errorClassName}`}>
+          {formError}
+        </p>
+      )}
+
+      <div className={honeypotClassName} aria-hidden>
+        <label htmlFor="booking-website">Website</label>
+        <input
+          id="booking-website"
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={data.website ?? ""}
+          onChange={(e) => update("website", e.target.value)}
+        />
       </div>
 
       <div key={step} className="step-enter space-y-6">
         {step === 1 && (
           <>
-            <Field label="Event type" error={errors.eventType}>
+            <FormField id="eventType" label="Event type" error={errors.eventType} required>
               <select
+                {...fieldAriaProps("eventType", errors.eventType)}
                 value={data.eventType}
                 onChange={(e) => update("eventType", e.target.value)}
-                className={inputClass}
+                className={inputClassName}
               >
                 <option value="">Select event type</option>
                 {EVENT_TYPES.map((type) => (
@@ -168,39 +209,50 @@ export function BookingForm() {
                   </option>
                 ))}
               </select>
-            </Field>
-            <Field label="Event date" error={errors.eventDate}>
+            </FormField>
+            <FormField id="eventDate" label="Event date" error={errors.eventDate} required>
               <input
+                {...fieldAriaProps("eventDate", errors.eventDate)}
                 type="date"
                 value={data.eventDate}
                 onChange={(e) => update("eventDate", e.target.value)}
-                className={inputClass}
+                className={inputClassName}
               />
-            </Field>
-            <Field label="Estimated guest count" error={errors.guestCount}>
+            </FormField>
+            <FormField
+              id="guestCount"
+              label="Estimated guest count"
+              error={errors.guestCount}
+              required
+            >
               <input
+                {...fieldAriaProps("guestCount", errors.guestCount)}
                 type="number"
                 min={1}
+                max={10000}
                 value={data.guestCount}
                 onChange={(e) => update("guestCount", e.target.value)}
-                className={inputClass}
+                className={inputClassName}
                 placeholder="e.g. 80"
               />
-            </Field>
-            <Field label="Event location / city" error={errors.location}>
+            </FormField>
+            <FormField id="location" label="Event location / city" error={errors.location} required>
               <input
+                {...fieldAriaProps("location", errors.location)}
                 type="text"
+                maxLength={200}
                 value={data.location}
                 onChange={(e) => update("location", e.target.value)}
-                className={inputClass}
+                className={inputClassName}
                 placeholder="City or venue"
               />
-            </Field>
-            <Field label="Approximate budget" error={errors.budget}>
+            </FormField>
+            <FormField id="budget" label="Approximate budget" error={errors.budget} required>
               <select
+                {...fieldAriaProps("budget", errors.budget)}
                 value={data.budget}
                 onChange={(e) => update("budget", e.target.value)}
-                className={inputClass}
+                className={inputClassName}
               >
                 <option value="">Select budget range</option>
                 {BUDGET_RANGES.map((range) => (
@@ -209,51 +261,69 @@ export function BookingForm() {
                   </option>
                 ))}
               </select>
-            </Field>
+            </FormField>
           </>
         )}
 
         {step === 2 && (
           <>
             <div className="grid gap-6 sm:grid-cols-2">
-              <Field label="First name" error={errors.firstName}>
+              <FormField id="firstName" label="First name" error={errors.firstName} required>
                 <input
+                  {...fieldAriaProps("firstName", errors.firstName)}
                   type="text"
+                  autoComplete="given-name"
+                  maxLength={100}
                   value={data.firstName}
                   onChange={(e) => update("firstName", e.target.value)}
-                  className={inputClass}
+                  className={inputClassName}
                 />
-              </Field>
-              <Field label="Last name" error={errors.lastName}>
+              </FormField>
+              <FormField id="lastName" label="Last name" error={errors.lastName} required>
                 <input
+                  {...fieldAriaProps("lastName", errors.lastName)}
                   type="text"
+                  autoComplete="family-name"
+                  maxLength={100}
                   value={data.lastName}
                   onChange={(e) => update("lastName", e.target.value)}
-                  className={inputClass}
+                  className={inputClassName}
                 />
-              </Field>
+              </FormField>
             </div>
-            <Field label="Email address" error={errors.email}>
+            <FormField id="email" label="Email address" error={errors.email} required>
               <input
+                {...fieldAriaProps("email", errors.email)}
                 type="email"
+                autoComplete="email"
+                maxLength={254}
                 value={data.email}
                 onChange={(e) => update("email", e.target.value)}
-                className={inputClass}
+                className={inputClassName}
               />
-            </Field>
-            <Field label="Phone number" error={errors.phone}>
+            </FormField>
+            <FormField id="phone" label="Phone number" error={errors.phone} required>
               <input
+                {...fieldAriaProps("phone", errors.phone)}
                 type="tel"
+                autoComplete="tel"
+                maxLength={30}
                 value={data.phone}
                 onChange={(e) => update("phone", e.target.value)}
-                className={inputClass}
+                className={inputClassName}
               />
-            </Field>
-            <Field label="How did you hear about us?" error={errors.hearAbout}>
+            </FormField>
+            <FormField
+              id="hearAbout"
+              label="How did you hear about us?"
+              error={errors.hearAbout}
+              required
+            >
               <select
+                {...fieldAriaProps("hearAbout", errors.hearAbout)}
                 value={data.hearAbout}
                 onChange={(e) => update("hearAbout", e.target.value)}
-                className={inputClass}
+                className={inputClassName}
               >
                 <option value="">Select an option</option>
                 {HEAR_ABOUT_OPTIONS.map((opt) => (
@@ -262,55 +332,66 @@ export function BookingForm() {
                   </option>
                 ))}
               </select>
-            </Field>
+            </FormField>
           </>
         )}
 
         {step === 3 && (
           <>
-            <Field label="Describe your dream event" error={errors.dreamEvent}>
+            <FormField
+              id="dreamEvent"
+              label="Describe your dream event"
+              error={errors.dreamEvent}
+              required
+            >
               <textarea
+                {...fieldAriaProps("dreamEvent", errors.dreamEvent)}
                 rows={4}
+                maxLength={5000}
                 value={data.dreamEvent}
                 onChange={(e) => update("dreamEvent", e.target.value)}
-                className={`${inputClass} resize-y`}
+                className={`${inputClassName} resize-y`}
               />
-            </Field>
-            <Field label="Themes or inspirations (optional)">
+            </FormField>
+            <FormField id="themes" label="Themes or inspirations (optional)">
               <textarea
+                id="themes"
                 rows={3}
-                value={data.themes}
+                maxLength={2000}
+                value={data.themes ?? ""}
                 onChange={(e) => update("themes", e.target.value)}
-                className={`${inputClass} resize-y`}
+                className={`${inputClassName} resize-y`}
               />
-            </Field>
-            <Field label="Special requirements (optional)">
+            </FormField>
+            <FormField id="specialRequests" label="Special requirements (optional)">
               <textarea
+                id="specialRequests"
                 rows={3}
-                value={data.specialRequests}
+                maxLength={2000}
+                value={data.specialRequests ?? ""}
                 onChange={(e) => update("specialRequests", e.target.value)}
-                className={`${inputClass} resize-y`}
+                className={`${inputClassName} resize-y`}
               />
-            </Field>
+            </FormField>
           </>
         )}
       </div>
 
       <div className="mt-10 flex flex-col-reverse gap-4 sm:flex-row sm:justify-between">
         {step > 1 ? (
-          <Button type="button" variant="ghost" onClick={back}>
+          <Button type="button" variant="ghost" onClick={back} disabled={isPending}>
             Back
           </Button>
         ) : (
           <span />
         )}
-        {step < 3 ? (
+        {step < TOTAL_STEPS ? (
           <Button type="button" variant="primary" onClick={next}>
             Continue
           </Button>
         ) : (
-          <Button type="submit" variant="primary">
-            Submit Enquiry
+          <Button type="submit" variant="primary" disabled={isPending}>
+            {isPending ? "Submitting…" : "Submit Enquiry"}
           </Button>
         )}
       </div>
@@ -318,28 +399,10 @@ export function BookingForm() {
   );
 }
 
-function Field({
-  label,
-  error,
-  children,
-}: {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <label className={labelClass}>{label}</label>
-      {children}
-      {error && <p className="mt-1 text-xs text-red-700">{error}</p>}
-    </div>
-  );
-}
-
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-1 sm:flex-row sm:gap-4">
-      <dt className="shrink-0 text-xs uppercase tracking-widest text-muted sm:w-32">{label}</dt>
+      <dt className={`shrink-0 sm:w-32 ${labelClassName}`}>{label}</dt>
       <dd className="text-foreground">{value}</dd>
     </div>
   );
