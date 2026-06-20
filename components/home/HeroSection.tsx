@@ -1,28 +1,31 @@
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
+import { HERO_VIDEO_PATH } from "@/lib/constants";
 
 export function HeroSection() {
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080808] pt-20">
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="hero-video pointer-events-none absolute inset-0 h-full w-full object-cover"
+        aria-hidden
+      >
+        <source src={HERO_VIDEO_PATH} type="video/quicktime" />
+      </video>
+
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(201,168,76,0.12)_0%,transparent_65%)]"
+        className="pointer-events-none absolute inset-0 bg-[#080808]/55"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute -right-32 top-1/4 h-[28rem] w-[28rem] rounded-full bg-accent-gold/5 blur-3xl"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080808]/70 via-[#080808]/35 to-[#080808]/80"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute -left-24 bottom-1/4 h-80 w-80 rounded-full bg-accent-gold/5 blur-3xl"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, #c9a84c 1px, transparent 0)",
-          backgroundSize: "40px 40px",
-        }}
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(201,168,76,0.08)_0%,transparent_70%)]"
         aria-hidden
       />
 

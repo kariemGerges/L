@@ -2,6 +2,7 @@ export const BRAND_NAME = "Lumé Events";
 export const BRAND_TAGLINE = "Bespoke Celebrations";
 export const LOGO_PATH = "/logo.jpeg";
 export const ABOUT_IMAGE_PATH = "/about-decoration.jpg";
+export const HERO_VIDEO_PATH = "/10.mov";
 export const CONTACT_EMAIL = "lumeevent2026@gmail.com";
 export const CONTACT_PHONE = "+1 (555) 234-8901";
 

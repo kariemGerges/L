@@ -18,7 +18,7 @@ const EVENT_CATEGORIES = [
     title: "Birthday Parties",
     description:
       "From intimate dinner parties to lavish milestone celebrations, we design birthdays that reflect the guest of honour's personality — thoughtful details, curated menus, and atmospheres that spark joy.",
-    image: "https://picsum.photos/seed/birthday/800/600",
+    image: "/3.JPG",
   },
   {
     id: "engagements",
@@ -26,7 +26,7 @@ const EVENT_CATEGORIES = [
     title: "Engagement Parties",
     description:
       "Celebrate your love story with an engagement party that sets the tone for your journey ahead. Romantic florals, candlelit tables, and bespoke touches that feel effortlessly elegant.",
-    image: "https://picsum.photos/seed/engagement/800/600",
+    image: "/2.JPG",
   },
   {
     id: "weddings",
@@ -34,7 +34,7 @@ const EVENT_CATEGORIES = [
     title: "Weddings",
     description:
       "Full-service wedding planning from concept to celebration day. Venue selection, vendor curation, timeline management, and design direction — so you can savour every moment.",
-    image: "https://picsum.photos/seed/wedding/800/600",
+    image: "/5.JPG",
   },
   {
     id: "special",
@@ -42,7 +42,7 @@ const EVENT_CATEGORIES = [
     title: "Special & Custom Events",
     description:
       "Baby showers, anniversaries, corporate retreats, and celebrations that defy categorisation. If you can dream it, we can design and deliver it with grace.",
-    image: "https://picsum.photos/seed/special/800/600",
+    image: "/4.JPG",
   },
 ] as const;
 
