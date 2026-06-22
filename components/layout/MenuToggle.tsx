@@ -13,10 +13,10 @@ export function MenuToggle({ open, onClick, light = false }: MenuToggleProps) {
     <button
       type="button"
       onClick={onClick}
-      className={`group relative flex items-center gap-2 overflow-hidden rounded-full border px-4 py-2.5 backdrop-blur-sm transition-all duration-300 hover:border-accent-gold lg:hidden ${
+      className={`group relative flex min-h-11 min-w-11 items-center justify-center gap-2 overflow-hidden rounded-full border px-4 py-3 transition-all duration-300 hover:border-accent-gold lg:hidden ${
         light
-          ? "border-cream/25 bg-black/20"
-          : "border-foreground/20 bg-background/80"
+          ? "border-cream/25 bg-black/30"
+          : "border-foreground/20 bg-background/95"
       }`}
       aria-label="Open menu"
       aria-expanded={false}

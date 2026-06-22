@@ -1,13 +1,18 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BrandMark } from "@/components/ui/BrandMark";
 import { Button } from "@/components/ui/Button";
-import { MobileMenu } from "@/components/layout/MobileMenu";
 import { MenuToggle } from "@/components/layout/MenuToggle";
 import { BRAND_NAME, NAV_LINKS } from "@/lib/constants";
+
+const MobileMenu = dynamic(
+  () => import("@/components/layout/MobileMenu").then((mod) => mod.MobileMenu),
+  { ssr: false },
+);
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -30,6 +35,24 @@ export function Navbar() {
     };
   }, [mobileOpen]);
 
+  useEffect(() => {
+    const main = document.getElementById("main-content");
+    const footer = document.querySelector("footer");
+
+    if (mobileOpen) {
+      main?.setAttribute("inert", "");
+      footer?.setAttribute("inert", "");
+    } else {
+      main?.removeAttribute("inert");
+      footer?.removeAttribute("inert");
+    }
+
+    return () => {
+      main?.removeAttribute("inert");
+      footer?.removeAttribute("inert");
+    };
+  }, [mobileOpen]);
+
   return (
     <>
       <header
@@ -37,7 +60,7 @@ export function Navbar() {
           mobileOpen
             ? "pointer-events-none bg-transparent"
             : scrolled
-              ? "bg-white/95 shadow-sm backdrop-blur-sm"
+              ? "bg-white/98 shadow-sm md:bg-white/95 md:backdrop-blur-sm"
               : "bg-transparent"
         }`}
       >
@@ -101,11 +124,13 @@ export function Navbar() {
         </nav>
       </header>
 
-      <MobileMenu
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-        pathname={pathname}
-      />
+      {mobileOpen ? (
+        <MobileMenu
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          pathname={pathname}
+        />
+      ) : null}
     </>
   );
 }

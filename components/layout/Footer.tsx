@@ -74,12 +74,23 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-blush/40 pt-8 md:flex-row">
-            <p className="text-xs text-muted">
-              &copy; {new Date().getFullYear()} {BRAND_NAME}. All rights reserved.
-            </p>
-            <p className="font-display text-sm italic text-accent-gold">
-              {FOOTER_MOTTO}
+          <div className="mt-12 border-t border-blush/40 pt-8">
+            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+              <p className="text-xs text-muted">
+                &copy; {new Date().getFullYear()} {BRAND_NAME}. All rights reserved.
+              </p>
+              <p className="font-display text-sm italic text-accent-gold">{FOOTER_MOTTO}</p>
+            </div>
+            <p className="mt-6 text-center text-xs text-muted">
+              Built and designed by{" "}
+              <a
+                href="https://kariemgerges.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground/70 transition-colors duration-200 hover:text-accent-gold"
+              >
+                Kariem Gerges
+              </a>
             </p>
           </div>
         </div>

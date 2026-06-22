@@ -34,6 +34,8 @@ const SERVICES = [
   },
 ] as const;
 
+const STAGGER_DELAYS = ["", "delay-100", "delay-200", "delay-300"] as const;
+
 export function ServicesSection() {
   return (
     <section className="bg-white py-24 md:py-32">
@@ -47,7 +49,7 @@ export function ServicesSection() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {SERVICES.map((service, index) => (
-            <RevealOnScroll key={service.title} className={`delay-[${index * 100}ms]`}>
+            <RevealOnScroll key={service.title} className={STAGGER_DELAYS[index] ?? ""}>
               <Link
                 href={service.href}
                 className="group flex h-full flex-col border border-transparent bg-cream p-8 transition-all duration-300 hover:-translate-y-1 hover:border-accent-gold hover:shadow-lg"
