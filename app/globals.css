@@ -60,19 +60,14 @@ textarea:focus-visible {
 }
 
 .reveal-on-scroll {
-  opacity: 1;
-  transform: none;
+  opacity: 0;
+  transform: translateY(1.5rem);
   transition:
     opacity 0.6s ease-out,
     transform 0.6s ease-out;
 }
 
-.reveal-on-scroll.reveal-pending {
-  opacity: 0;
-  transform: translateY(1.5rem);
-}
-
-.reveal-on-scroll.reveal-pending.is-visible {
+.reveal-on-scroll.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -173,47 +168,16 @@ textarea:focus-visible {
 
 .testimonials-marquee-track {
   animation: testimonials-marquee 50s linear infinite;
+  will-change: transform;
 }
 
 .testimonials-marquee:hover .testimonials-marquee-track {
   animation-play-state: paused;
 }
 
-@media (max-width: 767px) {
-  .testimonials-marquee-track {
-    animation: none;
-  }
-
-  .testimonials-marquee {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .testimonials-marquee::-webkit-scrollbar {
-    display: none;
-  }
-
-  .testimonials-marquee-track > * {
-    scroll-snap-align: center;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hero-video {
     display: none;
-  }
-
-  .animate-fade-up {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-
-  .reveal-on-scroll.reveal-pending {
-    opacity: 1;
-    transform: none;
   }
 
   .menu-reveal {

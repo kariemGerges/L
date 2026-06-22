@@ -7,26 +7,6 @@ interface RevealOnScrollProps {
   className?: string;
 }
 
-let sharedObserver: IntersectionObserver | null = null;
-
-function getSharedObserver() {
-  if (typeof window === "undefined") return null;
-
-  sharedObserver ??= new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          sharedObserver?.unobserve(entry.target);
-        }
-      }
-    },
-    { threshold: 0.12, rootMargin: "0px 0px -4% 0px" },
-  );
-
-  return sharedObserver;
-}
-
 export function RevealOnScroll({ children, className = "" }: RevealOnScrollProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -34,14 +14,18 @@ export function RevealOnScroll({ children, className = "" }: RevealOnScrollProps
     const el = ref.current;
     if (!el) return;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("is-visible");
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -5% 0px" },
+    );
 
-    el.classList.add("reveal-pending");
-    const observer = getSharedObserver();
-    observer?.observe(el);
-
-    return () => observer?.unobserve(el);
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (

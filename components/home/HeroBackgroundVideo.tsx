@@ -1,27 +1,12 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { HERO_POSTER_PATH, HERO_VIDEO_PATH } from "@/lib/constants";
-
-function shouldUseStaticHero() {
-  if (typeof window === "undefined") return true;
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const isMobile = window.matchMedia("(max-width: 767px)").matches;
-  return reducedMotion || isMobile;
-}
+import { useEffect, useRef } from "react";
+import { HERO_VIDEO_SOURCES } from "@/lib/constants";
 
 export function HeroBackgroundVideo() {
-  const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (shouldUseStaticHero()) return;
-    setShowVideo(true);
-  }, []);
-
-  useEffect(() => {
-    if (!showVideo) return;
     const video = videoRef.current;
     if (!video) return;
 
@@ -30,24 +15,12 @@ export function HeroBackgroundVideo() {
     };
 
     play();
+
+    if (video.readyState >= 2) return;
+
     video.addEventListener("loadeddata", play);
     return () => video.removeEventListener("loadeddata", play);
-  }, [showVideo]);
-
-  if (!showVideo) {
-    return (
-      <Image
-        src={HERO_POSTER_PATH}
-        alt=""
-        fill
-        priority
-        fetchPriority="high"
-        className="hero-video pointer-events-none absolute inset-0 h-full w-full object-cover"
-        sizes="100vw"
-        aria-hidden
-      />
-    );
-  }
+  }, []);
 
   return (
     <video
@@ -56,12 +29,13 @@ export function HeroBackgroundVideo() {
       muted
       loop
       playsInline
-      preload="metadata"
-      poster={HERO_POSTER_PATH}
+      preload="auto"
       className="hero-video pointer-events-none absolute inset-0 h-full w-full object-cover"
       aria-hidden
     >
-      <source src={HERO_VIDEO_PATH} type="video/mp4" />
+      {HERO_VIDEO_SOURCES.map(({ src, type }) => (
+        <source key={src} src={src} type={type} />
+      ))}
     </video>
   );
 }

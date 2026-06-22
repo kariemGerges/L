@@ -7,8 +7,10 @@ export const SITE_DESCRIPTION =
 export const FOOTER_MOTTO = "Every moment, beautifully planned.";
 export const LOGO_PATH = "/logo.jpeg";
 export const ABOUT_IMAGE_PATH = "/about-decoration.jpg";
-export const HERO_VIDEO_PATH = "/10.mp4";
-export const HERO_POSTER_PATH = "/hero-poster.jpg";
+export const HERO_VIDEO_SOURCES = [
+  { src: "/10.mp4", type: "video/mp4" },
+  { src: "/10.mov", type: "video/quicktime" },
+] as const;
 export const CONTACT_EMAIL = "lumeevent2026@gmail.com";
 
 export const NAV_LINKS = [

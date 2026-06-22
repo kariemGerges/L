@@ -7,12 +7,6 @@ const SIZES = {
   hero: { className: "h-48 w-48 md:h-60 md:w-60 lg:h-72 lg:w-72", width: 288, height: 288 },
 } as const;
 
-const LOGO_SIZES = {
-  md: "(max-width: 768px) 80px, 80px",
-  lg: "(max-width: 768px) 112px, 128px",
-  hero: "(max-width: 768px) 192px, (max-width: 1024px) 240px, 288px",
-} as const;
-
 type LogoSize = keyof typeof SIZES;
 
 interface LogoProps {
@@ -37,7 +31,6 @@ export function Logo({
       width={width}
       height={height}
       priority={priority}
-      sizes={LOGO_SIZES[size]}
       className={
         circular
           ? `h-full w-full object-cover ${className}`

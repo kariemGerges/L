@@ -54,7 +54,7 @@ export function GalleryGrid() {
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveFilter(filter)}
-                  className={`group flex min-h-11 items-center gap-2 border px-4 py-3 text-xs uppercase tracking-widest transition-all duration-300 ${
+                  className={`group flex items-center gap-2 border px-4 py-2.5 text-xs uppercase tracking-widest transition-all duration-300 ${
                     isActive
                       ? "border-accent-gold bg-accent-gold/10 text-foreground shadow-[0_0_0_1px_rgba(201,168,76,0.15)]"
                       : "border-blush/60 bg-transparent text-muted hover:border-accent-gold/50 hover:text-foreground"
@@ -94,7 +94,7 @@ export function GalleryGrid() {
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
-            <div className="absolute inset-0 flex items-end bg-gradient-to-t from-foreground/60 via-foreground/10 to-transparent p-6 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">
+            <div className="absolute inset-0 flex items-end bg-gradient-to-t from-foreground/70 via-transparent to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <p className="font-display text-xl italic text-white">{item.category}</p>
             </div>
           </article>
