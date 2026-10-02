@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { BRAND_NAME } from "@/lib/constants";
 import type { BookingSubmissionPayload } from "@/lib/domain/booking/create-submission";
 import { getServerEnv } from "@/lib/env";
 import { logger } from "@/lib/logger";
@@ -9,9 +10,11 @@ function getResendClient() {
   return new Resend(RESEND_API_KEY);
 }
 
+/** Send-only address on the verified domain. A mailbox is not required. */
 function getFromAddress(): string {
   const { EMAIL_FROM } = getServerEnv();
-  return EMAIL_FROM ?? "Lumé Events <onboarding@resend.dev>";
+  const address = EMAIL_FROM ?? "onboarding@resend.dev";
+  return `${BRAND_NAME} <${address}>`;
 }
 
 export async function sendBookingEmails(submission: BookingSubmissionPayload): Promise<void> {
@@ -42,6 +45,7 @@ export async function sendBookingEmails(submission: BookingSubmissionPayload): P
   const customerResult = await resend.emails.send({
     from,
     to: submission.email,
+    replyTo: BOOKING_NOTIFICATION_EMAIL,
     subject: customerEmail.subject,
     html: customerEmail.html,
     text: customerEmail.text,
